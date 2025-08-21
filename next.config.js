@@ -6,6 +6,3 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
-
-// File: .env.local (create this file locally - don't commit to git)
-OPENAI_API_KEY=your_openai_api_key_her
