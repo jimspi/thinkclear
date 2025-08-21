@@ -58,7 +58,45 @@ export default function Home() {
       <header className={styles.header}>
         <h1 className={styles.logo}>ThinkClear</h1>
         <p className={styles.tagline}>Watch AI reason through any question</p>
+        <p className={styles.subheadline}>Ready to think better with AI?</p>
       </header>
+
+      <div className={styles.demoContainer}>
+        <form onSubmit={handleSubmit} className={styles.interactiveDemo}>
+          <input
+            type="text"
+            className={styles.demoInput}
+            placeholder="Ask any question: business strategy, life decisions, creative problems..."
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            disabled={isLoading}
+          />
+          <button 
+            type="submit" 
+            className={styles.demoBtn} 
+            disabled={isLoading || !question.trim()}
+          >
+            {isLoading ? 'AI is thinking...' : 'Show Me The Thinking'}
+          </button>
+        </form>
+        
+        {response && (
+          <div className={styles.thinkingOutput}>
+            <div className={styles.thinkingProcess}>
+              {response.thinking.map((step, index) => (
+                <div key={index} className={styles.thinkingStep}>
+                  <div className={styles.stepLabel}>{step.label}</div>
+                  <div className={styles.stepContent}>{step.content}</div>
+                </div>
+              ))}
+            </div>
+            <div className={styles.finalAnswer}>
+              <div className={styles.answerLabel}>Conclusion</div>
+              <div>{response.conclusion}</div>
+            </div>
+          </div>
+        )}
+      </div>
 
       <div className={styles.ctaSection}>
         <button className={styles.primaryBtn} onClick={scrollToDemo}>
@@ -66,9 +104,9 @@ export default function Home() {
         </button>
       </div>
 
-      <div className={styles.demoContainer} id="demo">
+      <div className={styles.demoContainer}>
         <div className={styles.demoHeader}>
-          <h2 className={styles.demoTitle}>Watch AI Think Through Any Problem</h2>
+          <h2 className={styles.demoTitle}>Example: Watch AI Think Through Any Problem</h2>
         </div>
         
         <div className={styles.thinkingProcess}>
@@ -144,53 +182,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className={styles.demoContainer}>
-        <div className={styles.demoHeader}>
-          <h2 className={styles.demoTitle}>Try It Yourself</h2>
-        </div>
-        
-        <form onSubmit={handleSubmit} className={styles.interactiveDemo}>
-          <input
-            type="text"
-            className={styles.demoInput}
-            placeholder="Ask any question: business strategy, life decisions, creative problems..."
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            disabled={isLoading}
-          />
-          <button 
-            type="submit" 
-            className={styles.demoBtn} 
-            disabled={isLoading || !question.trim()}
-          >
-            {isLoading ? 'AI is thinking...' : 'Show Me The Thinking'}
-          </button>
-        </form>
-        
-        {response && (
-          <div className={styles.thinkingOutput}>
-            <div className={styles.thinkingProcess}>
-              {response.thinking.map((step, index) => (
-                <div key={index} className={styles.thinkingStep}>
-                  <div className={styles.stepLabel}>{step.label}</div>
-                  <div className={styles.stepContent}>{step.content}</div>
-                </div>
-              ))}
-            </div>
-            <div className={styles.finalAnswer}>
-              <div className={styles.answerLabel}>Conclusion</div>
-              <div>{response.conclusion}</div>
-            </div>
-          </div>
-        )}
       </div>
-
-      <footer className={styles.footer}>
-        <p>Ready to think better with AI?</p>
-        <button className={styles.primaryBtn} style={{ marginTop: '20px' }}>
-          Join the Waitlist
-        </button>
-      </footer>
     </div>
   )
 }
