@@ -104,7 +104,7 @@ export default function Home() {
         </button>
       </div>
 
-      <div className={styles.demoContainer}>
+      <div className={styles.demoContainer} id="demo">
         <div className={styles.demoHeader}>
           <h2 className={styles.demoTitle}>Example: Watch AI Think Through Any Problem</h2>
         </div>
@@ -180,8 +180,6 @@ export default function Home() {
             Collaborate with AI like a thinking partner. Build on ideas and explore different angles.
           </p>
         </div>
-      </div>
-
       </div>
     </div>
   )
