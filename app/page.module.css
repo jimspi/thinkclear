@@ -24,8 +24,18 @@
 .tagline {
   font-size: 1.5rem;
   color: #475569;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   font-weight: 300;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.subheadline {
+  font-size: 1.2rem;
+  color: #2563eb;
+  margin-bottom: 40px;
+  font-weight: 500;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
