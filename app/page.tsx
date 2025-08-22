@@ -26,6 +26,7 @@ export default function Home() {
   const [response, setResponse] = useState<AIResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [analysisType, setAnalysisType] = useState('comprehensive')
+  const [customFollowUp, setCustomFollowUp] = useState('')
   const [userProfile, setUserProfile] = useState<UserProfile>({
     previousQuestions: [],
     interests: [],
@@ -74,15 +75,48 @@ export default function Home() {
 
   const handleFollowUp = async (followUpQuestion: string) => {
     setQuestion(followUpQuestion)
-    // Auto-submit the follow-up
-    setTimeout(() => {
-      const event = new Event('submit', { bubbles: true, cancelable: true })
-      document.querySelector('form')?.dispatchEvent(event)
-    }, 100)
+    setIsLoading(true)
+    setResponse(null)
+
+    // Update user profile with follow-up
+    const updatedProfile = {
+      ...userProfile,
+      previousQuestions: [...userProfile.previousQuestions, followUpQuestion].slice(-10)
+    }
+    setUserProfile(updatedProfile)
+
+    try {
+      const res = await fetch('/api/think', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          question: followUpQuestion,
+          analysisType,
+          userProfile: updatedProfile
+        }),
+      })
+
+      if (!res.ok) {
+        throw new Error('Failed to get response')
+      }
+
+      const data: AIResponse = await res.json()
+      setResponse(data)
+    } catch (error) {
+      console.error('Error:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  const scrollToDemo = () => {
-    document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })
+  const handleCustomFollowUp = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!customFollowUp.trim()) return
+    
+    await handleFollowUp(customFollowUp.trim())
+    setCustomFollowUp('')
   }
 
   return (
@@ -152,10 +186,31 @@ export default function Home() {
                       key={index}
                       className={styles.followUpBtn}
                       onClick={() => handleFollowUp(q)}
+                      disabled={isLoading}
                     >
                       {q}
                     </button>
                   ))}
+                </div>
+                
+                <div className={styles.customFollowUpSection}>
+                  <form onSubmit={handleCustomFollowUp} className={styles.customFollowUpForm}>
+                    <input
+                      type="text"
+                      className={styles.customFollowUpInput}
+                      placeholder="Or ask your own follow-up question..."
+                      value={customFollowUp}
+                      onChange={(e) => setCustomFollowUp(e.target.value)}
+                      disabled={isLoading}
+                    />
+                    <button 
+                      type="submit" 
+                      className={styles.customFollowUpBtn}
+                      disabled={isLoading || !customFollowUp.trim()}
+                    >
+                      Ask
+                    </button>
+                  </form>
                 </div>
               </div>
             )}
