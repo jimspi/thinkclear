@@ -128,22 +128,6 @@ export default function Home() {
       </header>
 
       <div className={styles.demoContainer}>
-        <div className={styles.analysisTypeSection}>
-          <label className={styles.analysisLabel}>Choose your reasoning style:</label>
-          <select 
-            className={styles.analysisSelect}
-            value={analysisType}
-            onChange={(e) => setAnalysisType(e.target.value)}
-          >
-            <option value="comprehensive">Comprehensive Analysis</option>
-            <option value="strategic">Strategic Business Focus</option>
-            <option value="practical">Practical Action Steps</option>
-            <option value="creative">Creative Problem Solving</option>
-            <option value="risk-focused">Risk Assessment Focus</option>
-            <option value="quick-decision">Quick Decision Framework</option>
-          </select>
-        </div>
-
         <form onSubmit={handleSubmit} className={styles.interactiveDemo}>
           <input
             type="text"
@@ -153,6 +137,23 @@ export default function Home() {
             onChange={(e) => setQuestion(e.target.value)}
             disabled={isLoading}
           />
+          
+          <div className={styles.analysisTypeSection}>
+            <label className={styles.analysisLabel}>Choose your reasoning style:</label>
+            <select 
+              className={styles.analysisSelect}
+              value={analysisType}
+              onChange={(e) => setAnalysisType(e.target.value)}
+            >
+              <option value="comprehensive">Comprehensive Analysis</option>
+              <option value="strategic">Strategic Business Focus</option>
+              <option value="practical">Practical Action Steps</option>
+              <option value="creative">Creative Problem Solving</option>
+              <option value="risk-focused">Risk Assessment Focus</option>
+              <option value="quick-decision">Quick Decision Framework</option>
+            </select>
+          </div>
+          
           <button 
             type="submit" 
             className={styles.demoBtn} 
