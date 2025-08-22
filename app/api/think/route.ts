@@ -102,7 +102,29 @@ export async function POST(request: NextRequest) {
     // Parse the JSON response
     let parsedResponse
     try {
-      parsedResponse = JSON.parse(content)
+      // Clean the content first - remove any markdown formatting or extra text
+      let cleanContent = content.trim()
+      
+      // If the response starts with ```json, extract just the JSON part
+      if (cleanContent.startsWith('```json')) {
+        const jsonStart = cleanContent.indexOf('{')
+        const jsonEnd = cleanContent.lastIndexOf('}') + 1
+        cleanContent = cleanContent.substring(jsonStart, jsonEnd)
+      }
+      
+      // If it starts with ``` but not ```json, try to find JSON
+      if (cleanContent.startsWith('```')) {
+        const lines = cleanContent.split('\n')
+        const jsonLines = lines.slice(1, -1) // Remove first and last line (```)
+        cleanContent = jsonLines.join('\n')
+      }
+      
+      parsedResponse = JSON.parse(cleanContent)
+      
+      // Validate the structure
+      if (!parsedResponse.thinking || !Array.isArray(parsedResponse.thinking)) {
+        throw new Error('Invalid thinking structure')
+      }
       
       // Ensure follow-up questions exist
       if (!parsedResponse.followUpQuestions || !Array.isArray(parsedResponse.followUpQuestions)) {
@@ -113,15 +135,17 @@ export async function POST(request: NextRequest) {
         ]
       }
     } catch (parseError) {
-      // If JSON parsing fails, create a structured response
+      console.error('JSON Parse Error:', parseError, 'Content:', content)
+      
+      // Create a better fallback response
       parsedResponse = {
         thinking: [
           {
             label: "Analysis",
-            content: content
+            content: content.replace(/```json|```/g, '').trim()
           }
         ],
-        conclusion: "Let me provide a more structured analysis. Please try rephrasing your question.",
+        conclusion: "I've provided an analysis above. Let me know if you'd like me to explore any specific aspect further.",
         followUpQuestions: [
           "Can you provide more context about your situation?",
           "What specific outcome are you hoping to achieve?",
