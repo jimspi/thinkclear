@@ -99,11 +99,15 @@ export async function POST(request: NextRequest) {
       throw new Error('No response from OpenAI')
     }
 
+    console.log('Raw OpenAI Response:', content) // Debug log
+
     // Parse the JSON response
     let parsedResponse
     try {
       // Clean the content first - remove any markdown formatting or extra text
       let cleanContent = content.trim()
+      
+      console.log('Content before cleaning:', cleanContent.substring(0, 200)) // Debug
       
       // If the response starts with ```json, extract just the JSON part
       if (cleanContent.startsWith('```json')) {
@@ -119,7 +123,17 @@ export async function POST(request: NextRequest) {
         cleanContent = jsonLines.join('\n')
       }
       
+      // Find JSON object boundaries if mixed with other text
+      const firstBrace = cleanContent.indexOf('{')
+      const lastBrace = cleanContent.lastIndexOf('}')
+      if (firstBrace !== -1 && lastBrace !== -1 && firstBrace < lastBrace) {
+        cleanContent = cleanContent.substring(firstBrace, lastBrace + 1)
+      }
+      
+      console.log('Content after cleaning:', cleanContent.substring(0, 200)) // Debug
+      
       parsedResponse = JSON.parse(cleanContent)
+      console.log('Successfully parsed JSON') // Debug
       
       // Validate the structure
       if (!parsedResponse.thinking || !Array.isArray(parsedResponse.thinking)) {
@@ -135,17 +149,23 @@ export async function POST(request: NextRequest) {
         ]
       }
     } catch (parseError) {
-      console.error('JSON Parse Error:', parseError, 'Content:', content)
+      console.error('JSON Parse Error:', parseError, 'Original content length:', content.length)
+      
+      // Try to extract any useful content from malformed response
+      const cleanedContent = content
+        .replace(/```json|```/g, '')
+        .replace(/^\s*[\r\n]/gm, '')
+        .trim()
       
       // Create a better fallback response
       parsedResponse = {
         thinking: [
           {
             label: "Analysis",
-            content: content.replace(/```json|```/g, '').trim()
+            content: cleanedContent.length > 100 ? cleanedContent : "I need to provide a more structured response. Please try rephrasing your question."
           }
         ],
-        conclusion: "I've provided an analysis above. Let me know if you'd like me to explore any specific aspect further.",
+        conclusion: "Let me give you a clearer analysis. Please rephrase your question if this doesn't fully address what you're looking for.",
         followUpQuestions: [
           "Can you provide more context about your situation?",
           "What specific outcome are you hoping to achieve?",
