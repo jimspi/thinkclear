@@ -9,7 +9,7 @@
 }
 
 .header {
-  padding: 60px 0 40px;
+  padding: 40px 0 25px;
   text-align: center;
 }
 
@@ -17,14 +17,14 @@
   font-size: 2.5rem;
   font-weight: 700;
   color: #2563eb;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   letter-spacing: -0.02em;
 }
 
 .tagline {
   font-size: 1.5rem;
   color: #475569;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   font-weight: 300;
   max-width: 600px;
   margin-left: auto;
@@ -34,7 +34,7 @@
 .subheadline {
   font-size: 1.2rem;
   color: #2563eb;
-  margin-bottom: 40px;
+  margin-bottom: 25px;
   font-weight: 500;
   max-width: 600px;
   margin-left: auto;
@@ -74,9 +74,9 @@
 .demoContainer {
   background: white;
   border-radius: 20px;
-  padding: 40px;
+  padding: 30px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  margin-bottom: 80px;
+  margin-bottom: 50px;
   border: 1px solid #e2e8f0;
 }
 
@@ -160,7 +160,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
-  margin-bottom: 80px;
+  margin-bottom: 50px;
 }
 
 .featureCard {
@@ -210,12 +210,13 @@
 }
 
 .interactiveDemo {
-  margin-top: 30px;
+  margin-top: 0;
 }
 
 .analysisTypeSection {
-  margin-bottom: 25px;
-  padding: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  padding: 18px;
   background: #f8fafc;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
@@ -225,8 +226,8 @@
   display: block;
   font-weight: 600;
   color: #1e293b;
-  margin-bottom: 10px;
-  font-size: 1rem;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
 }
 
 .analysisSelect {
