@@ -12,12 +12,25 @@ interface ThinkingStep {
 interface AIResponse {
   thinking: ThinkingStep[];
   conclusion: string;
+  followUpQuestions?: string[];
+}
+
+interface UserProfile {
+  previousQuestions: string[];
+  interests: string[];
+  decisionStyle: string;
 }
 
 export default function Home() {
   const [question, setQuestion] = useState('')
   const [response, setResponse] = useState<AIResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [analysisType, setAnalysisType] = useState('comprehensive')
+  const [userProfile, setUserProfile] = useState<UserProfile>({
+    previousQuestions: [],
+    interests: [],
+    decisionStyle: 'analytical'
+  })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,13 +39,24 @@ export default function Home() {
     setIsLoading(true)
     setResponse(null)
 
+    // Update user profile
+    const updatedProfile = {
+      ...userProfile,
+      previousQuestions: [...userProfile.previousQuestions, question.trim()].slice(-10) // Keep last 10
+    }
+    setUserProfile(updatedProfile)
+
     try {
       const res = await fetch('/api/think', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ question: question.trim() }),
+        body: JSON.stringify({ 
+          question: question.trim(),
+          analysisType,
+          userProfile: updatedProfile
+        }),
       })
 
       if (!res.ok) {
@@ -43,10 +67,18 @@ export default function Home() {
       setResponse(data)
     } catch (error) {
       console.error('Error:', error)
-      // Handle error state
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleFollowUp = async (followUpQuestion: string) => {
+    setQuestion(followUpQuestion)
+    // Auto-submit the follow-up
+    setTimeout(() => {
+      const event = new Event('submit', { bubbles: true, cancelable: true })
+      document.querySelector('form')?.dispatchEvent(event)
+    }, 100)
   }
 
   const scrollToDemo = () => {
@@ -62,6 +94,22 @@ export default function Home() {
       </header>
 
       <div className={styles.demoContainer}>
+        <div className={styles.analysisTypeSection}>
+          <label className={styles.analysisLabel}>Choose your reasoning style:</label>
+          <select 
+            className={styles.analysisSelect}
+            value={analysisType}
+            onChange={(e) => setAnalysisType(e.target.value)}
+          >
+            <option value="comprehensive">Comprehensive Analysis</option>
+            <option value="strategic">Strategic Business Focus</option>
+            <option value="practical">Practical Action Steps</option>
+            <option value="creative">Creative Problem Solving</option>
+            <option value="risk-focused">Risk Assessment Focus</option>
+            <option value="quick-decision">Quick Decision Framework</option>
+          </select>
+        </div>
+
         <form onSubmit={handleSubmit} className={styles.interactiveDemo}>
           <input
             type="text"
@@ -91,69 +139,28 @@ export default function Home() {
               ))}
             </div>
             <div className={styles.finalAnswer}>
-              <div className={styles.answerLabel}>Conclusion</div>
+              <div className={styles.answerLabel}>Recommendation</div>
               <div>{response.conclusion}</div>
             </div>
+            
+            {response.followUpQuestions && response.followUpQuestions.length > 0 && (
+              <div className={styles.followUpSection}>
+                <div className={styles.followUpLabel}>Continue exploring:</div>
+                <div className={styles.followUpButtons}>
+                  {response.followUpQuestions.map((q, index) => (
+                    <button
+                      key={index}
+                      className={styles.followUpBtn}
+                      onClick={() => handleFollowUp(q)}
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
-      </div>
-
-      <div className={styles.ctaSection}>
-        <button className={styles.primaryBtn} onClick={scrollToDemo}>
-          See How It Works
-        </button>
-      </div>
-
-      <div className={styles.demoContainer} id="demo">
-        <div className={styles.demoHeader}>
-          <h2 className={styles.demoTitle}>Example: Watch AI Think Through Any Problem</h2>
-        </div>
-        
-        <div className={styles.thinkingProcess}>
-          <div className={styles.thinkingStep}>
-            <div className={styles.stepLabel}>Initial Analysis</div>
-            <div className={styles.stepContent}>
-              I'm breaking down this market analysis question by examining three critical dimensions: 
-              competitive landscape, customer segments, and market timing. Each requires different data sources and analytical approaches.
-            </div>
-          </div>
-          
-          <div className={styles.thinkingStep}>
-            <div className={styles.stepLabel}>Key Assumptions</div>
-            <div className={styles.stepContent}>
-              I'm assuming this is about a digital product launch based on context clues. 
-              I'm also assuming you have some preliminary market research. If either assumption is wrong, 
-              my analysis would need to be fundamentally different.
-            </div>
-          </div>
-          
-          <div className={styles.thinkingStep}>
-            <div className={styles.stepLabel}>What I'd Need to Know</div>
-            <div className={styles.stepContent}>
-              To be more confident in my reasoning, I'd want to understand: your target customer's 
-              pain points, budget constraints, and decision-making timeline. I'd also need competitor 
-              pricing and feature comparisons.
-            </div>
-          </div>
-          
-          <div className={styles.thinkingStep}>
-            <div className={styles.stepLabel}>Weighing Trade-offs</div>
-            <div className={styles.stepContent}>
-              The main tension is between speed-to-market versus product maturity. 
-              Moving fast captures opportunity but risks reputation damage. 
-              The right choice depends on how forgiving your early customers will be.
-            </div>
-          </div>
-        </div>
-        
-        <div className={styles.finalAnswer}>
-          <div className={styles.answerLabel}>Reasoning Conclusion</div>
-          <div>
-            Launch with a private beta to 20-30 selected users within 4 weeks. 
-            This balances speed with quality control, gives you real usage data, 
-            and creates a feedback loop before full market entry.
-          </div>
-        </div>
       </div>
 
       <div className={styles.featuresGrid}>
