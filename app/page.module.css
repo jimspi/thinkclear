@@ -198,6 +198,81 @@
   margin-top: 30px;
 }
 
+.analysisTypeSection {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.analysisLabel {
+  display: block;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.analysisSelect {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  color: #1e293b;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.analysisSelect:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.followUpSection {
+  margin-top: 25px;
+  padding: 20px;
+  background: #f0f9ff;
+  border-radius: 12px;
+  border: 1px solid #bae6fd;
+}
+
+.followUpLabel {
+  font-weight: 600;
+  color: #0369a1;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+}
+
+.followUpButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.followUpBtn {
+  background: white;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.followUpBtn:hover {
+  background: #2563eb;
+  color: white;
+  transform: translateY(-1px);
+}
+
 .demoInput {
   width: 100%;
   padding: 15px 20px;
