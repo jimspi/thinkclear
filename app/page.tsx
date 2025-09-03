@@ -128,7 +128,7 @@ export default function Home() {
       <header className={styles.header}>
         <h1 className={styles.logo}>ThinkClear</h1>
         <p className={styles.tagline}>Watch AI reason through any question with complete transparency</p>
-        <p className={styles.subheadline}>Now featuring AI Nutrition Labels for full disclosure</p>
+        <p className={styles.subheadline}>Now featuring AI Labels for full disclosure</p>
       </header>
 
       <div className={styles.demoContainer}>
