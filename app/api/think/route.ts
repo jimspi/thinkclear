@@ -1,6 +1,7 @@
 // File: app/api/think/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { generateAINLLabel } from '../../../utils/ainlGenerator'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -174,7 +175,16 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json(parsedResponse)
+    // Generate AINL label
+    const ainlLabel = generateAINLLabel(question, parsedResponse, analysisType)
+    
+    // Add AINL label to response
+    const responseWithAINL = {
+      ...parsedResponse,
+      ainlLabel
+    }
+
+    return NextResponse.json(responseWithAINL)
   } catch (error) {
     console.error('Error:', error)
     return NextResponse.json(
