@@ -1,4 +1,4 @@
-/* File: app/page.module.css */
+/* File: app/page.module.css - COMPLETE VERSION */
 
 .container {
   max-width: 1200px;
@@ -336,6 +336,120 @@
   animation: fadeIn 0.6s ease-in;
 }
 
+/* AINL-specific styles */
+.ainlSection {
+  margin-bottom: 30px;
+}
+
+.ainlToggleBtn {
+  background: #f8fafc;
+  color: #374151;
+  border: 2px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 12px;
+  display: block;
+  width: 100%;
+}
+
+.ainlToggleBtn:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.customFollowUpSection {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #bae6fd;
+}
+
+.customFollowUpForm {
+  display: flex;
+  gap: 10px;
+}
+
+.customFollowUpInput {
+  flex-grow: 1;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.customFollowUpInput:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.customFollowUpBtn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.customFollowUpBtn:hover {
+  background: #1d4ed8;
+}
+
+.customFollowUpBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ainlExplanation {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  margin-bottom: 50px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.ainlExplanationTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.ainlExplanationText {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #374151;
+  margin-bottom: 20px;
+}
+
+.ainlFeatureList {
+  margin: 30px 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.ainlFeatureList li {
+  background: #f8fafc;
+  padding: 15px 20px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border-left: 4px solid #2563eb;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.ainlFeatureList li strong {
+  color: #1e293b;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -374,5 +488,17 @@
   
   .followUpButtons {
     grid-template-columns: 1fr;
+  }
+
+  .customFollowUpForm {
+    flex-direction: column;
+  }
+
+  .ainlExplanation {
+    padding: 30px;
+  }
+
+  .ainlExplanationTitle {
+    font-size: 1.6rem;
   }
 }
