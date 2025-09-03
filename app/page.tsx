@@ -3,6 +3,8 @@
 
 import { useState } from 'react'
 import styles from './page.module.css'
+import { AINLLabelComponent } from '../components/AINLLabel'
+import { AINLLabel } from '../types/ainl'
 
 interface ThinkingStep {
   label: string;
@@ -13,6 +15,7 @@ interface AIResponse {
   thinking: ThinkingStep[];
   conclusion: string;
   followUpQuestions?: string[];
+  ainlLabel?: AINLLabel;
 }
 
 interface UserProfile {
@@ -27,6 +30,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
   const [analysisType, setAnalysisType] = useState('comprehensive')
   const [customFollowUp, setCustomFollowUp] = useState('')
+  const [showFullAINL, setShowFullAINL] = useState(false)
   const [userProfile, setUserProfile] = useState<UserProfile>({
     previousQuestions: [],
     interests: [],
@@ -123,8 +127,8 @@ export default function Home() {
     <div className={styles.container}>
       <header className={styles.header}>
         <h1 className={styles.logo}>ThinkClear</h1>
-        <p className={styles.tagline}>Watch AI reason through any question</p>
-        <p className={styles.subheadline}>Ready to think better with AI?</p>
+        <p className={styles.tagline}>Watch AI reason through any question with complete transparency</p>
+        <p className={styles.subheadline}>Now featuring AI Nutrition Labels for full disclosure</p>
       </header>
 
       <div className={styles.demoContainer}>
@@ -165,6 +169,22 @@ export default function Home() {
         
         {response && (
           <div className={styles.thinkingOutput}>
+            {/* AINL Label - Compact version by default */}
+            {response.ainlLabel && (
+              <div className={styles.ainlSection}>
+                <AINLLabelComponent 
+                  label={response.ainlLabel} 
+                  compact={!showFullAINL}
+                />
+                <button 
+                  className={styles.ainlToggleBtn}
+                  onClick={() => setShowFullAINL(!showFullAINL)}
+                >
+                  {showFullAINL ? 'Show Compact Label' : 'Show Full Nutrition Label'}
+                </button>
+              </div>
+            )}
+
             <div className={styles.thinkingProcess}>
               {response.thinking.map((step, index) => (
                 <div key={index} className={styles.thinkingStep}>
@@ -221,6 +241,14 @@ export default function Home() {
 
       <div className={styles.featuresGrid}>
         <div className={styles.featureCard}>
+          <div className={styles.featureIcon}>🔬</div>
+          <h3 className={styles.featureTitle}>AI Nutrition Labels</h3>
+          <p className={styles.featureDescription}>
+            See exactly what's inside every AI response - model info, confidence levels, risk assessment, and sources.
+          </p>
+        </div>
+        
+        <div className={styles.featureCard}>
           <div className={styles.featureIcon}>T</div>
           <h3 className={styles.featureTitle}>Transparent Reasoning</h3>
           <p className={styles.featureDescription}>
@@ -243,7 +271,46 @@ export default function Home() {
             Collaborate with AI like a thinking partner. Build on ideas and explore different angles.
           </p>
         </div>
+
+        <div className={styles.featureCard}>
+          <div className={styles.featureIcon}>⚡</div>
+          <h3 className={styles.featureTitle}>Certified Transparency</h3>
+          <p className={styles.featureDescription}>
+            AINL-certified responses with standardized disclosure labels for complete trust and accountability.
+          </p>
+        </div>
+
+        <div className={styles.featureCard}>
+          <div className={styles.featureIcon}>🛡️</div>
+          <h3 className={styles.featureTitle}>Risk Assessment</h3>
+          <p className={styles.featureDescription}>
+            Built-in risk flags for financial, medical, and legal advice with clear confidence indicators.
+          </p>
+        </div>
       </div>
+
+      <div className={styles.ainlExplanation}>
+        <h2 className={styles.ainlExplanationTitle}>What are AI Nutrition Labels?</h2>
+        <p className={styles.ainlExplanationText}>
+          Just like nutrition labels on food help you understand what you're consuming, AI Nutrition Labels (AINL) 
+          provide transparency about AI-generated content. Every response includes standardized information about:
+        </p>
+        <ul className={styles.ainlFeatureList}>
+          <li><strong>Model Information:</strong> Which AI model created the response and when</li>
+          <li><strong>Confidence Levels:</strong> How certain the AI is about different aspects of its answer</li>
+          <li><strong>Risk Assessment:</strong> Potential for hallucination, bias, or sensitive content</li>
+          <li><strong>Source Transparency:</strong> What information sources influenced the response</li>
+          <li><strong>Verification Level:</strong> Independent certification of transparency standards</li>
+        </ul>
+        <p className={styles.ainlExplanationText}>
+          This creates a universal standard for AI transparency, helping you make informed decisions about 
+          trusting and using AI-generated information.
+        </p>
+      </div>
+
+      <footer className={styles.footer}>
+        <p>Building trust through transparency. Every AI response deserves a nutrition label.</p>
+      </footer>
     </div>
   )
 }
